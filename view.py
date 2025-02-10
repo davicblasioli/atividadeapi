@@ -222,17 +222,14 @@ def login():
     cursor = con.cursor()
 
     cursor.execute('SELECT SENHA FROM USUARIOS WHERE EMAIL = ?', (email,))
-    senha = cursor.fetchone()
+    senha_crip = cursor.fetchone()
     cursor.close()
 
-    if not senha:
+    if not senha_crip:
         return jsonify({"error": "Usuário não encontrado"}), 404
 
-    senha_hash = senha[0]
+    senha_hash = senha_crip[0]
 
-    if check_password_hash(senha_hash, senha):  # Comparação direta
-        return jsonify({"message: Login realizado com sucesso"}), 200
-
+    if check_password_hash(senha_hash, senha):
+        return jsonify({"message": "Login realizado com sucesso"}), 200
     return jsonify({"error": "email ou senha invalidos"}), 401
-
-
